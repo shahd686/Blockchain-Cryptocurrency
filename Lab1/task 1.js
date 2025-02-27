@@ -7,7 +7,7 @@ let fs = require('fs');
 let EventEmitter = require('events');
 
 function readJsonFromFile(fileName) {
-    // قراءة الملف وتحويله إلى JSON
+    
     let rawData = fs.readFileSync(fileName);
     return JSON.parse(rawData);
 }
@@ -18,7 +18,7 @@ class CurrencyConverter extends EventEmitter {
         let rates = {};
         let usdMap = {};
 
-        // حساب أسعار التحويل من وإلى الدولار
+        
         for (let i in usdPrices) {
             let o = usdPrices[i];
             let sym = o['asset_id_quote'];
@@ -29,7 +29,7 @@ class CurrencyConverter extends EventEmitter {
             usdMap[sym] = usdRate;
         }
 
-        // حساب أسعار التحويل المباشر بين العملات الرقمية
+      
         let symbols = Object.keys(usdMap);
         for (let from of symbols) {
             for (let to of symbols) {
@@ -67,11 +67,11 @@ class CurrencyConverter extends EventEmitter {
             }
             console.log(`Updating ${sym} price to ${usdPrice} USD.`);
             
-            // تحديث أسعار USD
+           
             this.rates[`USD-${sym}`] = usdPrice;
             this.rates[`${sym}-USD`] = 1 / usdPrice;
           
-            // إعادة حساب أسعار التحويل بين العملات الرقمية
+           
             const symbols = Object.keys(this.rates)
                 .filter(key => key.startsWith('USD-'))
                 .map(key => key.split('-')[1]);
@@ -100,7 +100,7 @@ class CurrencyConverter extends EventEmitter {
     }
 }
 
-// مسار ملف JSON
+
 const PATH = './rates.json'
 let cnv = new CurrencyConverter(readJsonFromFile(PATH));
 
@@ -117,7 +117,7 @@ test(200, 'BTC', 'EOS');
 
 console.log("====================================================================");
 
-// اختبار الأحداث
+
 cnv.emit(SHOW, { from: "EOS", to: "BTC" });
 console.log("====================================================================");
 
